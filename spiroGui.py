@@ -163,7 +163,7 @@ class SpiroGui():
         # In scenario A it is disabled as it serves as a label while
         # in scenario B it will be enabled and the user will be able to write in it
         self.currentSpiroNameEntry = tk.Entry(
-            self.controlFrame, state="readonly", textvariable=self.currentSpiroNameText, width=25)
+            self.controlFrame, state="readonly", textvariable=self.currentSpiroNameText, width=20)
         # Pack this in between the two buttons in the option frame next to the Name label
         self.currentSpiroNameEntry.grid(row=1, column=2)
 
@@ -185,7 +185,7 @@ class SpiroGui():
         # In scenario A it is disabled as it serves as a label while
         # in scenario B it will be enabled and the user will be able to write in it
         self.currentSpiroMultipleEntry = tk.Entry(
-            self.controlFrame, state="readonly", textvariable=self.currentSpiroMultipleText, width=25)
+            self.controlFrame, state="readonly", textvariable=self.currentSpiroMultipleText, width=20)
         # Pack this in between the two buttons in the option frame next to the Multiple label
         self.currentSpiroMultipleEntry.grid(row=2, column=2)
 
