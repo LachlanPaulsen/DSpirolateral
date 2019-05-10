@@ -1,15 +1,26 @@
 #!/usr/bin/python3
 # Added the line above to ensure that this script will use the python3 interpreter instead of python 25
 
+"""
+This program written by Lachlan Paulsen. All rights reserved.
+"""
+
 # Import the standard python time and sys library. These come installed by default in python
 import time
 import sys
 
+# Import the signal standard python library, which is to handle the correct closing
+# of the program when CTRL-Z is presed
+import signal
+
+
 # import the turtle library which is distributed with python3
 import turtle
 
-# Attempt to import the otherSpiroClass.py file that should be in the same directory as this file
-# If it doesn't exist, the program will print out an error message and quit after 5 seconds
+# Attempt to import the otherSpiroClass.py file that should be in the same
+# directory as this file
+# If it doesn't exist, the program will print out an error message
+# and quit after 5 seconds
 try:
     import otherSpiroClass as spiroModule
 except ImportError:
@@ -17,13 +28,16 @@ except ImportError:
     time.sleep(5)
     sys.exit()
 
-# Attempt to import the otherSpiroClass.py file that should be in the same directory as this file
+# Attempt to import the otherSpiroClass.py file that should be in the same
+# directory as this file
+
 # The tkinter module is imported as Tkinter as windows but as tkinter in linux
 # This section of code will attempt to import it with the windows spelling
 # and will try the linux spelling after
 
 try:
-    # Attempt to import the tkinter library with the lowercase spelling. This is the most common spelling.
+    # Attempt to import the tkinter library with the lowercase spelling.
+    # This is the most common spelling.
     # We check this one first
     import tkinter as tk
 except ImportError:
@@ -37,15 +51,22 @@ except ImportError:
         time.sleep(5)
         sys.exit()
 
-# CLASS SPIROGUI: The reason why this is in a class is because global variable are *way* easier to use in the object method
-# This is just down to personal preference, however I do use a class in the otherSpiroClass.py file correctly
+# CLASS SPIROGUI: The reason why this is in a class is because global variable
+# are *way* easier to use in the object method
+# This is just down to personal preference, however I do use a class in the
+# otherSpiroClass.py file correctly
 
 
 class SpiroGui():
 
     # Init method of the object:
-    # This is called whenever SpiroGui is instantiated and sets up the gui and all it's required variables
+    # This is called whenever SpiroGui is instantiated and sets up the gui
+    # and all it's required variables
     def __init__(self):
+        # Set up the signal processor so that when CTRL-Z is pressed
+        # It runs the function that closes this application safely
+        signal.signal(signal.SIGTSTP, self.closeApplication)
+
         # This is the root window of the tkinter application.
         self.root = tk.Tk()
         self.root.resizable(0, 0)  # Prevent this window from being resized.
@@ -60,7 +81,8 @@ class SpiroGui():
         # program running
         self.applicationOpen = True
 
-        # This list will hold all of our spiroObjects which contain the information on each spirolateral
+        # This list will hold all of our spiroObjects which contain the
+        # information on each spirolateral
         self.spiroList = []
 
         # This is the current index of the spirolateral displayed on screen
@@ -343,6 +365,7 @@ class SpiroGui():
 
     # Delete spiro state function:
     # Set up the gui so that it queries the user if they want to delete the current spirolateral
+    # Update the next/cofnirm and prev/cancel buttons to have the right text
     def deleteSpiroState(self):
         # Permanately sink the delete button in as this indicates to the user what mode is currently in use
         self.deleteButton.configure(relief=tk.SUNKEN)
@@ -354,7 +377,6 @@ class SpiroGui():
         self.dialogLabel.configure(
             text="Are you sure you want to delete this spirolateral?")
 
-        # Update the next/cofnirm and prev/cancel buttons to have the right text
         # and the commands that happen when the buttons are pressed
         # The now yes button will run the deleteSpiro function
         # The now No button will return the gui to the normal state
@@ -447,8 +469,11 @@ class SpiroGui():
         self.normalState()
 
     # This method is run when the user closes the application through the x on the window
-    def closeApplication(self):
+    # The *args argument is just there so that the program ignores any extra
+    # Arguments that the signal processer might throw at us
+    def closeApplication(self, *args):
         self.applicationOpen = False
+        print("\nThank you for using this program")
 
     # This method handles the main loop of the application
     def mainLoop(self):
@@ -460,13 +485,7 @@ class SpiroGui():
             # If at any point the user presses CTRL-C in the terminal, instead
             # Of an error the user is told what's happened
             except KeyboardInterrupt:
-                print("\nCaught keyboard interrupt in terminal. Quitting...")
-                # Destroy the application so it isn't left frozen on the user's desktop
-                self.root.destroy()
-                # Close the program
-                sys.exit()
-        # We will only run this line when the user click x on the application window
-        print("Thank you for using this program")
+                self.closeApplication()
 
 
 # Instantiate the above spiro gui object to run the main loop of the program

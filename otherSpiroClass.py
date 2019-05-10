@@ -1,3 +1,8 @@
+"""
+This program written by Lachlan Paulsen
+"""
+
+
 # Import the standard turtle and time module
 import turtle
 import time
